@@ -73,3 +73,38 @@ alter table salaries
 add constraint fk_salaries_emp_no foreign key(emp_no)
 references employee (emp_no);
 
+alter table employee
+alter column hire_date type date
+using to_date(hire_date, 'MM/DD/YYYY');
+
+alter table employee
+alter column birth_date type date
+using to_date(birth_date, 'MM/DD/YYYY');
+
+
+-- DATA ANALYSIS
+
+-- 1. List the employee number, last name, first name, sex, and salary of each employee
+-- for this we will have to join the employee table and the salaries table
+
+select employee.emp_no, employee.first_name, employee.last_name, employee.sex, salaries.salary
+from employee 
+inner join salaries
+on salaries.emp_no = employee.emp_no
+
+-- 2. List the first name, last name, and hire date for employees hired in 1986
+select employee.first_name, employee.last_name, employee.hire_date
+from employee
+where hire_date >= '1986-01-01'
+and hire_date <= '1986-12-31'
+
+-- 3. List the manager of each department along with their 
+-- dept_no, dept_name, emp_no, last_name, first_name 
+
+select d.dept_no, d.dept_name, e.emp_no, e.first_name, e.last_name
+from departments as d
+inner join department_manager as dm
+on d.dept_no = dm.dept_no
+inner join employee as e
+on e.emp_no = dm.emp_no
+
